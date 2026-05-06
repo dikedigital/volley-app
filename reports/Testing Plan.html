@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Volley — Testing Plan</title>
+  <meta name="theme-color" content="#F7F4EF" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Nunito:wght@500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="report-base.css">
+  <style>
+    /* phase card */
+    .phase-card {
+      background: var(--card);
+      border: 1px solid var(--border-soft);
+      border-radius: 22px;
+      overflow: hidden;
+      margin-top: 24px;
+    }
+
+    .phase-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      padding: 26px 26px 20px;
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .phase-icon {
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 26px;
+      color: white;
+    }
+
+    .ph-1 .phase-icon {
+      background: var(--primary);
+    }
+
+    .ph-2 .phase-icon {
+      background: var(--accent);
+      color: var(--ink);
+    }
+
+    .ph-3 .phase-icon {
+      background: var(--success);
+    }
+
+    .ph-4 .phase-icon {
+      background: var(--ink);
+    }
+
+    .phase-meta {
+      flex: 1;
+    }
+
+    .phase-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted-fg);
+      margin-bottom: 6px;
+    }
+
+    .phase-title {
+      font-family: var(--font-serif);
+      font-weight: 500;
+      font-size: clamp(20px, 2.8vw, 28px);
+      line-height: 1.1;
+      color: var(--ink);
+      margin: 0 0 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .phase-desc {
+      font-size: 15px;
+      color: var(--muted-fg);
+      margin: 0;
+      line-height: 1.6;
+      max-width: 60ch;
+    }
+
+    .phase-body {
+      padding: 0 26px 26px;
+    }
+
+    .phase-section {
+      padding-top: 22px;
+    }
+
+    .phase-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted-fg);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .phase-section-title::before {
+      content: "";
+      width: 14px;
+      height: 1.5px;
+      background: currentColor;
+      display: inline-block;
+    }
+
+    /* kill logic block */
+    .kill-block {
+      background: rgba(217, 90, 53, .07);
+      border: 1px solid rgba(217, 90, 53, .2);
+      border-radius: 14px;
+      padding: 18px 20px;
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: var(--foreground);
+    }
+
+    .kill-block strong {
+      color: var(--primary);
+    }
+
+    /* gate funnel diagram */
+    .gate-node {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      padding: 14px 16px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .gate-node .g-label {
+      font-weight: 600;
+      color: var(--ink);
+      display: block;
+      font-size: 14px;
+    }
+
+    .gate-node .g-sub {
+      color: var(--muted-fg);
+      font-size: 12px;
+      display: block;
+      margin-top: 3px;
+    }
+
+    .gate-arrow {
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      color: var(--muted-fg);
+    }
+
+    /* soft-numbers section */
+    .soft-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .soft-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: var(--card);
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      padding: 16px 18px;
+    }
+
+    .soft-n {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--background-deep);
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-top: 1px;
+    }
+
+    .soft-item p {
+      margin: 0;
+      font-size: 15px;
+      color: var(--muted-fg);
+      line-height: 1.55;
+    }
+
+    .soft-item p strong {
+      color: var(--ink);
+    }
+
+    /* phase summary table */
+    .phase-sum-grid {
+      display: grid;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-top: 24px;
+    }
+
+    .phase-sum-row {
+      display: grid;
+      grid-template-columns: 60px 180px 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .phase-sum-row:last-child {
+      border-bottom: none;
+    }
+
+    .phase-sum-row.head {
+      background: var(--background-deep);
+    }
+
+    .psrc {
+      padding: 12px 14px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--foreground);
+      border-right: 1px solid var(--border-soft);
+    }
+
+    .psrc:last-child {
+      border-right: none;
+    }
+
+    .phase-sum-row.head .psrc {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--muted-fg);
+    }
+
+    @media (max-width: 639px) {
+      .phase-sum-row {
+        grid-template-columns: 50px 1fr;
+      }
+
+      .phase-sum-row>.psrc:nth-child(3),
+      .phase-sum-row>.psrc:nth-child(4) {
+        display: none;
+      }
+
+      .phase-header {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .phase-body {
+        padding: 0 18px 20px;
+      }
+
+      .phase-header {
+        padding: 18px 18px 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="../Landing Page.html" class="topbar-logo"><img src="../assets/volley-logo-text.png" alt="Volley"></a>
+      <span class="topbar-sep"></span>
+      <nav class="topbar-links">
+        <a href="Funnel One-Pager.html" class="topbar-link"><span class="dot" style="background:var(--primary)"></span>
+          Funnel</a>
+        <a href="Meta Ads.html" class="topbar-link"><span class="dot" style="background:var(--accent)"></span> Meta
+          Ads</a>
+        <a href="Testing Plan.html" class="topbar-link active"><span class="dot"
+            style="background:var(--success)"></span> Testing Plan</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="report-hero">
+      <div class="wrap">
+        <div class="report-badge"><span class="dot" style="background:var(--success)"></span> Testing Plan</div>
+        <h1 class="report-title" style="max-width: none;">Four phases. One gate each.</h1>
+        <div class="report-subtitle" style="font-size: 16px; max-width: none;">
+          <p style="margin: 0 0 8px; font-weight: 600; color: var(--ink);">Four conversion gates that matter:</p>
+          <ol style="margin: 0 0 16px 20px; padding: 0;">
+            <li style="margin-bottom: 4px;">Page to call start</li>
+            <li style="margin-bottom: 4px;">Call start to call completion</li>
+            <li style="margin-bottom: 4px;">Results screen to account creation</li>
+            <li style="margin-bottom: 4px;">Account creation to paid (day 30)</li>
+          </ol>
+          <p style="margin: 0;">Each phase tests one gate. No phase starts until the previous one is locked.</p>
+        </div>
+        <div class="report-meta">
+          <span><strong>4</strong> conversion gates</span>
+          <span class="sep">·</span>
+          <span><strong>NPI</strong> baseline — cold pixel</span>
+          <span class="sep">·</span>
+          <span>Kill date: day 21 for Phase 1</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap">
+
+      <!-- NPI note -->
+      <div class="callout callout-warning mt40">
+        <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        <div>
+          <strong>NPI baseline note</strong>
+          <p style="margin: 8px 0;">No historical data. Cold pixel. No existing audience. This means:</p>
+          <p style="margin: 0 0 8px;">Early CPMs will run high — Meta's algorithm needs 50+ conversion events per ad set before it exits the learning phase. Budget for this. Do not kill angles in the first 7 days.</p>
+          <p style="margin: 0;">Absolute cost benchmarks do not exist yet. All kill decisions in Phase 1 are relative — angle vs. angle — not against an external standard.</p>
+        </div>
+      </div>
+
+      <div class="sec mt48">
+        <h2 class="sec-title">Phases</h2>
+      </div>
+
+      <!-- Phase 1 -->
+      <div class="phase-card ph-1">
+        <div class="phase-header">
+          <div class="phase-icon">1</div>
+          <div class="phase-meta">
+            <h3 class="phase-title">Which ad angle works</h3>
+            <div class="phase-label">Gate tested: Ad → Call start</div>
+            <div class="phase-label">Duration: Sample-driven. Minimum 100 call starts per angle before any kill
+              decision.
+            </div>
+            <p class="phase-desc" style="margin-bottom: 8px;">Three ad sets. One angle each. Equal daily budget.</p>
+            <p class="phase-desc" style="margin-bottom: 8px;">All traffic to the landing page. Do not change the page during Phase 1.</p>
+            <p class="phase-desc">Angle 4 held back as retargeting only until Phases 1–2 are complete.</p>
+          </div>
+        </div>
+      <div class="phase-body">
+        <div class="phase-section">
+          <div class="phase-section-title">Setup</div>
+          <div class="card card-sm" style="display:grid; gap:8px; font-size:14px; color:var(--muted-fg);">
+            <div style="display:flex; gap:10px;"><span class="tag tag-muted" style="flex-shrink:0;">Day 1–7</span>
+              Optimize for landing page views while Meta exits the learning phase.</div>
+            <div style="display:flex; gap:10px;"><span class="tag tag-muted" style="flex-shrink:0;">Day 7+</span>
+              Switch to call starts once each ad set has 50+ events.</div>
+            <div style="display:flex; gap:10px;"><span class="tag tag-primary" style="flex-shrink:0;">Day 21</span>
+              Kill date. Set the calendar block now and do not review before it.</div>
+            <div style="display:flex; gap:10px;"><span class="tag tag-muted" style="flex-shrink:0;">Min</span> 100
+              call starts per angle before any kill decision.</div>
+          </div>
+        </div>
+        <div class="phase-section">
+          <div class="phase-section-title">Metrics</div>
+          <div class="tbl-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>Role</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Call start rate</strong> (page visits → call starts)</td>
+                  <td style="color:var(--muted-fg)">Primary — did this angle attract the right person?</td>
+                </tr>
+                <tr>
+                  <td>Call completion rate (started → finished)</td>
+                  <td style="color:var(--muted-fg)">Quality check — did they stay through 15 minutes?</td>
+                </tr>
+                <tr>
+                  <td>Cost per call completion</td>
+                  <td style="color:var(--muted-fg)">Efficiency — what did it cost to get a complete diagnosis?</td>
+                </tr>
+                <tr>
+                  <td>30-day trial-to-paid rate by angle</td>
+                  <td style="color:var(--muted-fg)">Buyer quality — the modifier that overrides cost</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="phase-section">
+          <div class="phase-section-title">Kill logic</div>
+          <div class="kill-block">
+            <p style="margin:0 0 10px;">Cost per call completion is the kill trigger. Trial-to-paid is the override.
+            </p>
+            <p style="margin:0 0 10px;">If Angle B costs <strong>2× Angle A</strong> per completion with a similar
+              trial-to-paid rate: <strong>kill Angle B</strong>, move budget to Angle A.</p>
+            <p style="margin:0 0 10px;">If Angle B costs 2× Angle A but trial-to-paid is meaningfully stronger:
+              calculate cost per paid subscriber for each. The cheaper completion is not always the winner.</p>
+            <p style="margin:0;"><strong>If call completion rate is low across all three simultaneously:</strong> the
+              problem is not the angle. It is the call experience. Do not kill angles — fix the call first, then
+              restart.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="phase-card ph-2">
+      <div class="phase-header">
+        <div class="phase-icon">2</div>
+          <div class="phase-meta">
+            <h3 class="phase-title">Call framing</h3>
+            <div class="phase-label">Gate tested: Page → Call start</div>
+            <div class="phase-label">Traffic: Winning angle from Phase 1 only</div>
+            <div class="phase-label">Duration: Minimum 200 call starts across both variants</div>
+            <p class="phase-desc" style="margin-bottom: 8px;">The page CTA is "Start your first conversation." This phase tests whether the framing of what happens after the click affects call start rate and — more importantly — call completion rate.</p>
+            <p class="phase-desc">Same call. Different expectation the visitor arrives with. Expectation shapes perceived value of the results.</p>
+          </div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-section">
+          <div class="phase-section-title">What you're testing</div>
+          <div class="grid2">
+            <div class="card card-sm">
+              <div class="tag tag-muted" style="margin-bottom:8px;">Control</div>
+              <p style="font-size:14px; color:var(--muted-fg); margin:0; line-height:1.55;">Current CTA framing: <em
+                  style="color:var(--ink); font-family:var(--font-serif); font-size:15px;">"Start your first
+                  conversation. Free. 15 minutes. No account."</em></p>
+            </div>
+            <div class="card card-sm">
+              <div class="tag tag-accent" style="margin-bottom:8px;">Variant</div>
+              <p style="font-size:14px; color:var(--muted-fg); margin:0; line-height:1.55;">Diagnosis framing: <em
+                  style="color:var(--ink); font-family:var(--font-serif); font-size:15px;">"Find out exactly where
+                  your [language] breaks down. Free. 15 minutes."</em></p>
+            </div>
+          </div>
+        </div>
+        <div class="phase-section">
+          <div class="phase-section-title">Metrics</div>
+          <div class="tbl-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>What it tells you</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Call start rate</td>
+                  <td style="color:var(--muted-fg)">Did one framing earn more clicks into the call?</td>
+                </tr>
+                <tr>
+                  <td>Call completion rate</td>
+                  <td style="color:var(--muted-fg)">Did one framing attract people more likely to finish?</td>
+                </tr>
+                <tr>
+                  <td>Results screen engagement (scroll, time)</td>
+                  <td style="color:var(--muted-fg)">Did one framing create higher motivation to read the output?</td>
+                </tr>
+                <tr>
+                  <td>Account creation rate</td>
+                  <td style="color:var(--muted-fg)">Did one framing produce more conversions at the offer moment?</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="phase-section">
+          <div class="phase-section-title">Kill logic</div>
+          <div class="kill-block">
+            <p style="margin:0 0 10px;">If completion rate diverges by <strong>more than 15%</strong> between variants
+              after 200 call starts: the framing is doing real work. Lock the winner.</p>
+            <p style="margin:0;">If completion rates are similar but account creation rate differs: the framing
+              affects how people receive the results, not just whether they start. Lock the winner based on account
+              creation rate.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="phase-card ph-3">
+      <div class="phase-header">
+        <div class="phase-icon">3</div>
+          <div class="phase-meta">
+            <h3 class="phase-title">Results screen and offer</h3>
+            <div class="phase-label">Gate tested: Results screen → Account creation</div>
+            <div class="phase-label">Traffic: Winning angle + winning call framing</div>
+            <div class="phase-label">Duration: Minimum 200 completed calls across both variants</div>
+            <p class="phase-desc">The results screen is the highest-leverage moment in the funnel. The user has just experienced the product. They have a personalised assessment in front of them. This is where $99/month first appears. Small changes here have outsized downstream impact.</p>
+          </div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-section">
+          <div class="phase-section-title">What you're testing</div>
+          <div class="grid2">
+            <div class="card card-sm">
+              <div class="tag tag-muted" style="margin-bottom:8px;">Control</div>
+              <p style="font-size:14px; color:var(--muted-fg); margin:0; line-height:1.55;">Assessment, 6-week plan,
+                and offer presented in sequence — full detail on all three sections visible on load.</p>
+            </div>
+            <div class="card card-sm">
+              <div class="tag tag-success" style="margin-bottom:8px;">Variant</div>
+              <p style="font-size:14px; color:var(--muted-fg); margin:0; line-height:1.55;">Assessment only visible on
+                load. Plan and offer revealed progressively as the user scrolls or taps "see your plan." A user who
+                actively reveals the plan has expressed more intent.</p>
+            </div>
+          </div>
+        </div>
+        <div class="phase-section">
+          <div class="phase-section-title">Metrics</div>
+          <div class="tbl-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>What it tells you</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Account creation rate</strong></td>
+                  <td style="color:var(--muted-fg)">Primary — did the screen convert?</td>
+                </tr>
+                <tr>
+                  <td>Time on results screen</td>
+                  <td style="color:var(--muted-fg)">Did people read it or bounce?</td>
+                </tr>
+                <tr>
+                  <td>30-day trial-to-paid rate</td>
+                  <td style="color:var(--muted-fg)">Did the screen attract committed buyers or curious browsers?</td>
+                </tr>
+                <tr>
+                  <td>60-day retention</td>
+                  <td style="color:var(--muted-fg)">Did one variant produce users who stayed longer?</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="phase-section">
+          <div class="phase-section-title">Kill logic</div>
+          <div class="kill-block">
+            <p style="margin:0 0 10px;">Account creation rate is the primary kill signal. If one variant produces
+              <strong>10%+ higher account creation</strong> after 200 completed calls, lock it regardless of
+              time-on-screen.
+            </p>
+            <p style="margin:0;">If account creation rates are similar but 30-day trial-to-paid diverges: lock the
+              variant with higher trial-to-paid. A user who converted to paid is worth more than two who created
+              accounts and churned.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 4 -->
+    <div class="phase-card ph-4">
+      <div class="phase-header">
+        <div class="phase-icon">4</div>
+          <div class="phase-meta">
+            <h3 class="phase-title">Scaling and Angle 4</h3>
+            <div class="phase-label">Unlocked after: Phases 1–3 complete, winning combination locked</div>
+            <p class="phase-desc">At this point you have a baseline cost per paid subscriber. Angle 4's performance is measured against that number, not against Phase 1 benchmarks.</p>
+          </div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-section">
+          <div class="phase-section-title">Deploy Angle 4 as</div>
+          <div class="card card-sm"
+            style="display:grid; gap:10px; font-size:14.5px; color:var(--muted-fg); max-width:560px;">
+            <div style="display:flex; gap:10px; align-items:flex-start;">
+              <span class="tag tag-muted" style="flex-shrink:0; margin-top:1px;">1</span>
+              <span><strong style="color:var(--ink)">Retargeting</strong> against all page visitors who did not start
+                the call.</span>
+            </div>
+            <div style="display:flex; gap:10px; align-items:flex-start;">
+              <span class="tag tag-muted" style="flex-shrink:0; margin-top:1px;">2</span>
+              <span><strong style="color:var(--ink)">Cold traffic test</strong> against the winning angle from Phase
+                1. Measured against baseline cost per paid subscriber.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- What to kill first -->
+    <div class="sec mt56">
+      <span class="sec-label">Triage</span>
+      <h2 class="sec-title">What to kill first if numbers come in soft</h2>
+      <p class="sec-body" style="margin-top:8px;">Soft numbers across all three phases mean one of two things. Work
+        through them in order before changing anything else.</p>
+    </div>
+    <div class="soft-list">
+      <div class="soft-item">
+        <span class="soft-n">1</span>
+        <p><strong>Check call completion rate first.</strong> If fewer than 70% of users who start the call finish it,
+          the call itself is the problem. No amount of ad or page optimization fixes a leaky call experience. Pause
+          paid spend, fix the call, restart Phase 1.</p>
+      </div>
+      <div class="soft-item">
+        <span class="soft-n">2</span>
+        <p><strong>Check the results screen drop-off.</strong> If call completion is strong but account creation is
+          weak, the results screen is not delivering on the promise the ad and page made. The most common cause: the
+          assessment output feels generic. If the AI is producing level labels without specific behavioral
+          observations, the diagnosis moment fails and the offer lands cold. Fix output specificity before testing
+          variants.</p>
+      </div>
+    </div>
+    <div class="callout callout-info mt16" style="max-width:680px;">
+      <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      <span>Soft numbers are almost never an ad problem at NPI stage. They are a product promise problem. The ad got
+        the click. The call or the results screen did not close it.</span>
+    </div>
+
+    <!-- Summary table -->
+    <div class="sec mt56">
+      <span class="sec-label">At a glance</span>
+      <h2 class="sec-title">Phase summary</h2>
+    </div>
+    <div class="phase-sum-grid">
+      <div class="phase-sum-row head">
+        <div class="psrc">Phase</div>
+        <div class="psrc">Gate</div>
+        <div class="psrc">Primary metric</div>
+        <div class="psrc">Kill trigger</div>
+      </div>
+      <div class="phase-sum-row">
+        <div class="psrc"><span class="tag tag-primary">1</span></div>
+        <div class="psrc">Ad → call start</div>
+        <div class="psrc" style="color:var(--muted-fg)">Cost per paid subscriber by angle</div>
+        <div class="psrc" style="color:var(--muted-fg)">2× cost per completion with no trial-to-paid offset, at day 21
+        </div>
+      </div>
+      <div class="phase-sum-row">
+        <div class="psrc"><span class="tag tag-accent">2</span></div>
+        <div class="psrc">Page → call start</div>
+        <div class="psrc" style="color:var(--muted-fg)">Call completion rate + account creation rate</div>
+        <div class="psrc" style="color:var(--muted-fg)">15%+ divergence in completion rate after 200 starts</div>
+      </div>
+      <div class="phase-sum-row">
+        <div class="psrc"><span class="tag tag-success">3</span></div>
+        <div class="psrc">Results → account creation</div>
+        <div class="psrc" style="color:var(--muted-fg)">Account creation rate + trial-to-paid</div>
+        <div class="psrc" style="color:var(--muted-fg)">10%+ divergence in account creation after 200 completed calls
+        </div>
+      </div>
+      <div class="phase-sum-row">
+        <div class="psrc"><span class="tag tag-muted">4</span></div>
+        <div class="psrc">Scaling</div>
+        <div class="psrc" style="color:var(--muted-fg)">Cost per paid subscriber vs. Phase 1 baseline</div>
+        <div class="psrc" style="color:var(--muted-fg)">Below baseline CPL after 100 paid subscribers</div>
+      </div>
+    </div>
+
+    </div>
+  </main>
+
+  <footer class="report-footer">
+    <div class="wrap"
+      style="width:100%; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+      <span>Volley Testing Plan · NPI constraints applied</span>
+      <nav style="display:flex; gap:16px;">
+        <a href="Funnel One-Pager.html" style="color:var(--primary); font-weight:500; font-size:13px;">← Funnel</a>
+        <a href="Meta Ads.html" style="color:#8C5A10; font-weight:500; font-size:13px;">← Meta Ads</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+
+</html>

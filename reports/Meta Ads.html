@@ -1,0 +1,556 @@
+<!DOCTYPE html><html lang="en" data-jetski-tab-id="error"><head>
+
+
+
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Volley — Meta Ad Angles</title>
+<meta name="theme-color" content="#F7F4EF">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Instrument+Serif:ital@0;1&amp;family=Nunito:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="report-base.css">
+<style>
+  /* angle card */
+  .angle-card {
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: 22px;
+    overflow: hidden;
+    margin-top: 32px;
+  }
+  .angle-header {
+    padding: 28px 28px 20px;
+    border-bottom: 1px solid var(--border-soft);
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  }
+  .angle-num {
+    font-family: var(--font-serif); font-style: italic;
+    font-size: 52px; line-height: 1; color: var(--primary); opacity: .18;
+    position: absolute; right: 24px; top: 20px;
+    pointer-events: none;
+  }
+  .angle-header-inner { position: relative; flex: 1; }
+  .angle-name {
+    font-family: var(--font-serif); font-weight: 500;
+    font-size: clamp(22px, 3vw, 30px); line-height: 1.1;
+    letter-spacing: -0.01em; color: var(--ink);
+    margin: 8px 0 10px;
+  }
+  .angle-audience { font-size: 15px; color: var(--muted-fg); line-height: 1.6; max-width: 58ch; margin: 0; }
+
+  .angle-body { padding: 0 28px 28px; }
+  .angle-section { padding-top: 24px; }
+  .angle-section-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--muted-fg); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .angle-section-title::before { content:""; width: 14px; height: 1.5px; background: currentColor; display:inline-block; }
+
+  /* copy block */
+  .copy-block {
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--foreground);
+    position: relative;
+  }
+  .copy-block::before {
+    content: '"';
+    position: absolute; top: 12px; left: 18px;
+    font-family: var(--font-serif); font-size: 48px; line-height: 1;
+    color: var(--primary); opacity: .15; pointer-events: none;
+  }
+  .copy-block .body-text { padding-left: 8px; }
+  .copy-meta { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); display: grid; gap: 8px; }
+  .copy-row { display: flex; gap: 10px; font-size: 13.5px; }
+  .copy-row .lbl { font-weight: 600; color: var(--ink); min-width: 90px; flex-shrink: 0; }
+  .copy-row .val { color: var(--muted-fg); }
+  .copy-row .val em { font-style: italic; font-family: var(--font-serif); font-size: 15px; color: var(--ink); }
+
+  /* test block */
+  .test-block { display: grid; gap: 10px; }
+  .test-var {
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 16px;
+    display: flex; gap: 12px; align-items: flex-start;
+    font-size: 14px;
+  }
+  .test-var .ver {
+    flex-shrink: 0;
+    width: 28px; height: 28px; border-radius: 999px;
+    background: var(--background-deep);
+    display: grid; place-items: center;
+    font-size: 12px; font-weight: 700; color: var(--ink);
+  }
+  .test-var p { margin: 0; color: var(--muted-fg); line-height: 1.5; }
+  .test-var p strong { color: var(--ink); }
+
+  /* summary grid */
+  .summary-grid { display: grid; gap: 0; overflow: hidden; border-radius: 16px; border: 1px solid var(--border); margin-top: 24px; }
+  .summary-row {
+    display: grid; grid-template-columns: 160px 1fr; gap: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-lbl {
+    padding: 13px 16px; background: var(--background-deep);
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em;
+    color: var(--muted-fg); border-right: 1px solid var(--border);
+    display: flex; align-items: center;
+  }
+  .summary-cells {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+  .summary-cell {
+    padding: 13px 14px; font-size: 13px; color: var(--foreground); line-height: 1.4;
+    border-right: 1px solid var(--border-soft);
+  }
+  .summary-cell:last-child { border-right: none; }
+  .summary-head .summary-cell { font-weight: 700; color: var(--ink); font-size: 12px; background: var(--background-deep); }
+
+  @media (max-width: 767px) {
+    .summary-grid { display: none; }
+    .angle-num { display: none; }
+  }
+  @media (max-width: 639px) {
+    .angle-header { padding: 20px 18px 16px; }
+    .angle-body { padding: 0 18px 20px; }
+  }
+
+  /* deployment order */
+  .deploy-steps { display: grid; gap: 12px; margin-top: 20px; }
+  .deploy-step {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: var(--card); border: 1px solid var(--border-soft);
+    border-radius: 14px; padding: 16px 18px;
+  }
+  .deploy-n {
+    flex-shrink: 0; width: 32px; height: 32px; border-radius: 999px;
+    background: var(--ink); color: white;
+    display: grid; place-items: center;
+    font-family: var(--font-serif); font-style: italic; font-size: 17px;
+  }
+  .deploy-step p { margin: 0; font-size: 15px; color: var(--muted-fg); line-height: 1.55; }
+  .deploy-step p strong { color: var(--ink); }
+</style>
+</head>
+<body style="">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../Landing Page.html" class="topbar-logo"><img src="../assets/volley-logo-text.png" alt="Volley"></a>
+    <span class="topbar-sep"></span>
+    <nav class="topbar-links">
+      <a href="Funnel One-Pager.html" class="topbar-link"><span class="dot" style="background:var(--primary)"></span> Funnel</a>
+      <a href="Meta Ads.html" class="topbar-link active"><span class="dot" style="background:var(--accent)"></span> Meta Ads</a>
+      <a href="Testing Plan.html" class="topbar-link"><span class="dot" style="background:var(--success)"></span> Testing Plan</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="report-hero">
+    <div class="wrap">
+      <div class="report-badge"><span class="dot" style="background:var(--accent)"></span> Meta Ad Angles</div>
+      <h1 class="report-title">Four angles. One offer.</h1>
+      <p class="report-subtitle">All four sell the free AI call — not the subscription. No angle mentions price. No angle mentions a free trial. Every ad ends at the same place: a 15-minute conversation, no account required.</p>
+      <div class="report-meta">
+        <span><strong>4</strong> ad angles</span>
+        <span class="sep">·</span>
+        <span><strong>3</strong> cold traffic angles</span>
+        <span class="sep">·</span>
+        <span><strong>1</strong> retargeting angle</span>
+        <span class="sep">·</span>
+        <span style=""><br></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- Angle 1 -->
+    <div class="angle-card" id="angle1">
+      <div class="angle-header">
+        <div class="angle-header-inner">
+          <div class="angle-num">1</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
+            <span class="tag tag-primary">Cold traffic</span>
+            <span class="tag tag-muted">Video or static</span>
+            <span class="tag tag-muted">App dropout</span>
+          </div>
+          <h2 class="angle-name">The person who has quit before</h2>
+          <p class="angle-audience" style="">28–45. Has tried Duolingo at least twice. Considers themselves "bad at languages" but has decent passive knowledge. The failure was never ability — it was accountability. No one noticed when they stopped. The app sent a notification, and that was it.</p><div><br></div><div style="">This person does not need to be sold on language learning, they already want it. They need to be convinced that this time is structurally different, not just better.</div><p></p>
+        </div>
+      </div>
+      <div class="angle-body">
+        <div class="angle-section">
+          <div class="angle-section-title">Hook logic</div>
+          <div class="callout callout-info">
+            <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4v12a6 6 0 0 1-12 0v-2"></path><circle cx="15" cy="4" r="2"></circle><path d="M7 14l-4 2"></path></svg>
+            <span style="">What happened when you quit Duolingo? Nothing. What happens when you skip with Volley? Someone notices. <br><br>That asymmetry is the entire ad. The proof point is the coach message: specific, human, adaptive. Not an automated nudge — a real response to what actually happened. No app has that. The hook names the exact failure mode this person has already lived and shows the structural difference in one screenshot.</span>
+          </div>
+        </div>
+
+        <div class="angle-section">
+          <div class="angle-section-title">Ad copy</div>
+          <div class="copy-block">
+            <div class="body-text">I quit Duolingo twice.<br><br>Both times, nothing happened. No one noticed. The streak reset and the app sent me a notification the next day like nothing was wrong.<br><br>With Volley, my tutor messaged me when I skipped Tuesday.<br><br>Not an automated email. A real message: "I see you missed yesterday — want me to set up something shorter for today so you don't lose momentum?"<br><br>I did the shorter session. I haven't missed a week since.</div>
+            <div class="copy-meta">
+              <div class="copy-row"><span class="lbl">Headline</span><span class="val"><em>Your coach notices when you skip.</em></span></div>
+              <div class="copy-row"><span class="lbl">Description</span><span class="val">Free 15-minute AI conversation. No account. Find out where you actually are.</span></div>
+              <div class="copy-row"><span class="lbl">CTA button</span><span class="val">Start free</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="angle-section">
+          <div class="angle-section-title">Visual direction</div>
+          <div class="grid2">
+            <div class="card card-sm">
+              <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--muted-fg); margin-bottom:8px;">Static (1:1 or 4:5)</div>
+              <p style="font-size: 14px; color: var(--muted-fg); margin: 0px; line-height: 1.55;"></p><div style="color: rgb(115, 107, 96);"><b style="">Concept:</b> The entire creative is a single phone screenshot of a coach message in the Volley app.</div><div><br></div><div style=""><b style=""><span style="color: rgb(115, 107, 96);">What's on screen:</span></b>&nbsp;<span style="color: var(--muted-fg);">Clean chat interface. Coach avatar (real photo, not illustrated). Message reads:</span></div><div><br></div><div style="margin: 0px 0px 0px 10px; border-width: 0px 0px 0px 2px; border-style: solid; border-color: rgb(115, 107, 96); padding: 0px 0px 0px 5px;"><span style="color: rgb(115, 107, 96);">"Hey — I noticed you didn't practice yesterday. Want me to swap today's session for a shorter 10-minute one so it's easier to get back? You were doing really well with restaurant vocab."</span></div><div><br></div><div style="color: rgb(115, 107, 96);">Timestamp: "Tuesday, 2:14 PM"</div><div><br></div><div style="color: rgb(115, 107, 96);">User reply below: "Yes please" with a small checkmark.<div><br><div><span class="_aupe copyable-text xkrh14z" style="white-space: pre-wrap;"><span style="font-weight: bold;">Why this works</span>: Shows the mechanism, not the promise. Anyone ghosted by a streak app will feel this before they finish reading.</span></div></div></div><p></p>
+            </div>
+            <div class="card card-sm">
+              <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--muted-fg); margin-bottom:8px;">Video (9:16, 15–30s)</div>
+              <p style="font-size: 14px; color: var(--muted-fg); margin: 0px; line-height: 1.55;"><div><span style="font-weight: bold;">Scene 1 (0–4s):</span> Close-up of a phone. Duolingo notification: "You lost your streak." Screen locked. No response.</div><div><br></div><div style=""><span style="font-weight: bold;">Scene 2 (4–8s):</span> Same phone. Different app. Coach message appears: "Hey, I noticed you missed yesterday. Want a shorter session today?" User's thumb taps "yes."</div><div><br></div><div style=""><span style="font-weight: bold;">Scene 3 (8–18s):</span> Screen recording of a quick AI conversation in the app. Earbuds in, commute or kitchen table. No performance.</div><div><br></div><div style=""><span style="font-weight: bold;">Scene 4 (18–25s): </span>Static card. "Start your first conversation. Free." Volley logo.</div><div><br></div><div style=""><span style="font-weight: bold;">Audio:</span> No voiceover. Ambient sound only. Text-on-screen carries the story.</div><div><br></div><div style=""><span style="font-weight: bold;">Casting note: </span>No stock. Real person, real phone, normal environment. The less produced this looks, the better it performs.</div></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="angle-section">
+          <div class="angle-section-title">What to test</div>
+          <div class="test-block">
+            <div class="test-var">
+              <span class="ver">A</span>
+              <p><strong>"I quit Duolingo twice."</strong> — Personal identification, first person. Self-selects harder.</p>
+            </div>
+            <div class="test-var">
+              <span class="ver">B</span>
+              <p style=""><strong>"The problem with every language app is the same: no one notices when you stop."</strong> — Direct category accusation. Casts wider.</p>
+            </div>
+          </div>
+          <div class="callout callout-success mt12">
+            <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+            <span style=""><strong>Optimize for:</strong> Call start rate, not just CTR.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Angle 2 -->
+    <div class="angle-card" id="angle2">
+      <div class="angle-header">
+        <div class="angle-header-inner">
+          <div class="angle-num">2</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
+            <span class="tag tag-primary">Cold traffic</span>
+            <span class="tag tag-muted">Static or video</span>
+            <span class="tag tag-accent">Prior spender</span>
+          </div>
+          <h2 class="angle-name">The person who has already spent money and stopped</h2>
+          <p class="angle-audience" style="">30–50. Has spent real money on language learning — a course, a tutor, a premium app. Stopped not because they ran out of motivation but because the ROI felt wrong.&nbsp;They kept showing up but could not measure progress. The tutor was fine but generic. The course had a curriculum that did not match what they actually needed. They are not burned out on language learning. They are burned out on paying for things that do not move the needle.<div><br></div><div>This person is not resistant to spending money. They are resistant to spending money before knowing what the actual problem is.</div></p>
+        </div>
+      </div>
+      <div class="angle-body">
+        <div class="angle-section">
+          <div class="angle-section-title">Hook logic</div>
+          <div class="callout callout-info">
+            <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4v12a6 6 0 0 1-12 0v-2"></path><circle cx="15" cy="4" r="2"></circle><path d="M7 14l-4 2"></path></svg>
+            <span style=""><div>Every other product asks them to buy first and figure out later whether it was the right fit. Volley inverts that. The free AI call is a diagnosis before a prescription. The hook names the pattern they already know — spending without knowing what to spend on — and offers a way out of it that costs nothing.</div><div><br></div><div>The promise is not "Volley is cheaper" or "Volley is better." The promise is: find out what the actual problem is before spending another cent. That argument works on people who have not hired a tutor yet too, not just those who have.</div></span>
+          </div>
+        </div>
+
+        <div class="angle-section">
+          <div class="angle-section-title">Ad copy</div>
+          <div class="copy-block">
+            <div class="body-text" style="">You have probably spent money on language learning already.<br><br>Apps. Maybe a course. Maybe a tutor for a few months. Something that felt like progress and then stopped.<br><br>Before you spend anything else, find out what the problem actually is.<br><br>Most people who struggle with a language are not bad at languages. They have a specific gap — a verb tense they avoid, a situation where they freeze — and they have never had anyone name it precisely.<br><br>Volley's AI tutor runs a free 15-minute conversation in your language.At the end: your level, the specific gaps between what you know and what you can produce, and a plan that targets them.<div><br></div><div>No account. No credit card. Just find out where you actually are.</div></div>
+            <div class="copy-meta">
+              <div class="copy-row"><span class="lbl">Headline</span><span class="val"><em>Find out what's actually holding your language back.</em></span></div>
+              <div class="copy-row"><span class="lbl">Description</span><span class="val">Free 15-minute AI conversation. Your level and your specific gaps, in one session.</span></div>
+              <div class="copy-row"><span class="lbl">CTA button</span><span class="val">Start free</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="angle-section">
+          <div class="angle-section-title">Visual direction</div>
+          <div class="grid2">
+            <div class="card card-sm">
+              <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--muted-fg); margin-bottom:8px;">Static (4:5)</div>
+              <p style="font-size: 14px; color: var(--muted-fg); margin: 0px; line-height: 1.55;"><div><span style="font-weight: bold;">Concept:</span> A post-call results screen mock showing what the AI call produces.</div><div><br></div><div><span style="font-weight: bold;">What's on screen:</span>&nbsp;<span style="color: var(--muted-fg);">Phone displaying a results card. Clean layout.</span></div><div><br></div><div style=""><span style="font-weight: bold;"><span style="font-weight: normal;">Top: </span></span>"Your assessment — Spanish B1"</div><div><br></div><div style="">Three specific observations below:</div><div style="">- "Strong vocabulary in social contexts. Gaps in professional register."</div><div>- "You pause before past tense conjugations — especially irregular verbs."</div><div>- "You understand follow-up questions but default to shorter answers under pressure."</div><div><br></div><div>Small label below: "Your 6-week plan is ready."</div><div><br></div><div style=""><span style="font-weight: bold;">Treatment:&nbsp;</span></div><div>Phone on a warm neutral background. Volley wordmark only — no text overlay. The results card is the creative. It shows exactly what the visitor gets from the free call before they click.</div><div><br></div><div style=""><span style="font-weight: bold;">Why this works:</span> Makes the value of the call concrete and specific. The visitor knows what they will receive and it reads as a real diagnosis, not a generic placement score.</div></p>
+            </div>
+            <div class="card card-sm">
+              <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--muted-fg); margin-bottom:8px;">Video (9:16, 20–30s)</div>
+              <p style="font-size: 14px; color: var(--muted-fg); margin: 0px; line-height: 1.55;"><div><span style="font-weight: bold;">Scene 1 (0–5s):</span> Text on dark background, appearing line by line:</div><div><br></div><div style="">"You've tried apps."</div><div>(pause)</div><div style="">"Maybe a tutor."</div><div>(pause)</div><div style="">"You're still not where you want to be."</div><div><br></div><div>No visuals. Typography only.</div><div><br></div><div><span style="font-weight: bold;">Scene 2 (5–14s):</span> Slow scroll through the post-call results screen. Level confirmed, three named observations, plan preview. No voiceover.</div><div><br></div><div><span style="font-weight: bold;">Scene 3 (14–22s):</span> Text card:</div><div><br></div><div style="">"This is what you get from a free 15-minute conversation."</div><div style="">"Not a quiz. Not a placement test. A real diagnosis."</div><div><br></div><div style=""><span style="font-weight: bold;">Scene 4 (22–28s): </span>Volley logo. "Free. No account. Start your first conversation."</div><div><br></div><div style=""><span style="font-weight: bold;">Audio:</span> No voiceover. Quiet neutral ambient sound optional.</div></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="angle-section">
+          <div class="angle-section-title">What to test</div>
+          <div class="test-block">
+            <div class="test-var">
+              <span class="ver">A</span>
+              <p><strong>"You have probably spent money on language learning already."</strong> — Assumes prior spend, filters for the right audience. Sharper hook.</p>
+            </div>
+            <div class="test-var">
+              <span class="ver">B</span>
+              <p style=""><strong>"Before you spend anything on language learning, do this first."</strong> — Works on people who have not spent yet. Higher volume, lower intent.</p>
+            </div>
+          </div>
+          <div class="callout callout-success mt12">
+            <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+            <span style=""><strong>Optimize for:</strong> Trial-to-paid rate, not just call starts.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Angle 3 -->
+    <div class="angle-card" id="angle3">
+      <div class="angle-header">
+        <div class="angle-header-inner">
+          <div class="angle-num">3</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
+            <span class="tag tag-primary">Cold traffic · Best fit</span>
+            <span class="tag tag-muted">Video or static</span>
+            <span class="tag tag-muted">Intermediate plateau</span>
+          </div>
+          <h2 class="angle-name">The person who knows the language but freezes</h2>
+          <p class="angle-audience" style="">25–45. Intermediate. Can read and understand more than they can produce. When someone speaks at normal speed, they understand 60–70% — but respond in half-sentences, apologize, and switch back to English.<div><br></div><div><div>The failure is not vocabulary. Not grammar. It is the gap between passive understanding and active production under time pressure. They know the word. They cannot get it out when someone is looking at them.</div><div><br></div><div>This person does not identify with "beginner." Do not position Volley as beginner-friendly to this audience. They will ignore it.</div></div></p>
+        </div>
+      </div>
+      <div class="angle-body">
+        <div class="angle-section">
+          <div class="angle-section-title">Hook logic</div>
+          <div class="callout callout-info">
+            <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4v12a6 6 0 0 1-12 0v-2"></path><circle cx="15" cy="4" r="2"></circle><path d="M7 14l-4 2"></path></svg>
+            <span style="">Name the exact failure moment: someone speaks, they understand, they still freeze. <br><br>That is not a knowledge problem — it is a reps problem.&nbsp;They have never practiced producing language under social pressure. Apps do not create social pressure.<br><br>The promise is not "get fluent." The promise is: you already know more than you think. Find out precisely where production breaks down. <br><br><strong style="">This angle fits the funnel best of the four.&nbsp;<span style="font-weight: normal;">The AI call is the exact thing this person needs: a real conversation that surfaces exactly where they stall. The ad, the page, and the call are one continuous argument.</span></strong></span>
+          </div>
+        </div>
+
+        <div class="angle-section">
+          <div class="angle-section-title">Ad copy</div>
+          <div class="copy-block">
+            <div class="body-text" style="color: rgb(115, 107, 96);">You know the word.<br><br>You know you know it. You've seen it a hundred times. But someone asks you a question in Spanish and it's just... gone. You smile and say "sorry, my Spanish isn't very good" and the conversation moves on.<br><br>That's not a vocabulary problem. You have the vocabulary.<br><br>What you don't have is reps under pressure. Real conversation pressure, where someone is waiting and you have to produce.<br><br>Volley runs a free 15-minute AI conversation in your language. It responds, waits, and adapts — and at the end tells you exactly which constructions you avoid, which situations make you stall, and what to do about them.&nbsp;<div><br></div><div>Free. No account.&nbsp;See what your actual gaps really are.</div></div>
+            <div class="copy-meta">
+              <div class="copy-row"><span class="lbl">Headline</span><span class="val"><em>You already know more than you can say.</em></span></div>
+              <div class="copy-row"><span class="lbl">Description</span><span class="val">Free 15-minute AI conversation. Your specific gaps, named precisely.</span></div>
+              <div class="copy-row"><span class="lbl">CTA button</span><span class="val">Start free</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="angle-section">
+          <div class="angle-section-title">Visual direction</div>
+          <div class="grid2">
+            <div class="card card-sm">
+              <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--muted-fg); margin-bottom:8px;">Static (1:1)</div>
+              <p style="font-size: 14px; color: var(--muted-fg); margin: 0px; line-height: 1.55;"><div><span style="font-weight: bold;">Concept: </span>Two phone screens, side by side.</div><div><br></div><div>Left screen: Genericized chat app. Someone wrote in Spanish: "¿Y qué hiciste el fin de semana?" Reply below: "Ah, uhh... lo siento, mi español no es muy bueno."</div><div><br></div><div>Right screen: Volley post-call results. One observation visible: "You understand follow-up questions but default to shorter answers under pressure. This is a production gap, not a vocabulary gap."</div><div><br></div><div>Below both screens: "Find out exactly where yours is."</div><div><br></div><div>Volley wordmark. "Free. No account."</div><div><br></div><div><span style="font-weight: bold;">Color treatment:</span> Left screen slightly desaturated. Right screen full color. Subtle enough to read as real, not staged.</div></p>
+            </div>
+            <div class="card card-sm">
+              <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--muted-fg); margin-bottom:8px;">Video (9:16, 20–30s)</div>
+              <p style="font-size: 14px; color: var(--muted-fg); margin: 0px; line-height: 1.55;"><div><span style="font-weight: bold;">Scene 1 (0–5s): </span>Text on dark background, word by word:</div><div><br></div><div>"You know the word."</div><div>(pause)</div><div>"You just can't get it out."</div><div><br></div><div>Typography only. Silence.</div><div><br></div><div style=""><span style="font-weight: bold;">Scene 2 (5–14s):</span> Screen recording of an AI conversation. The AI asks a follow-up question. The user pauses, then responds. The AI continues naturally. Looks like someone figuring something out in real time — no performance.</div><div><br></div><div style=""><span style="font-weight: bold;">Scene 3 (14–22s):</span> Post-call results screen. One observation highlighted: "You pause before irregular past tense verbs under conversational pressure."</div><div><br></div><div>Text below: "Now you know. Now you can fix it."</div><div><br></div><div style=""><span style="font-weight: bold;">Scene 4 (22–28s):</span> Volley logo. "Free. 15 minutes. No account."</div><div><br></div><div style=""><span style="font-weight: bold;">Audio:</span> No voiceover. Text-on-screen carries everything. Low ambient sound optional.</div><div><br></div><div style=""><span style="font-weight: bold;">Production note:</span> No human face needed. Screen recording and typography only. Fast to produce and fast to iterate.</div></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="angle-section">
+          <div class="angle-section-title">What to test</div>
+          <div class="test-block">
+            <div class="test-var">
+              <span class="ver">A</span>
+              <p style=""><strong>"You know the word."</strong> — Highly specific, strong self-selection. Smallest addressable audience, highest intent signal.</p>
+            </div>
+            <div class="test-var">
+              <span class="ver">B</span>
+              <p><strong>"You understand more than you can say."</strong> — Broader entry, captures the passive-active gap more explicitly.</p>
+            </div>
+          </div>
+          <div class="callout callout-success mt12">
+            <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+            <span style=""><strong>Optimize for:</strong> Call completion rate and trial-to-paid (not volume).</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Angle 4 -->
+    <div class="angle-card" id="angle4">
+      <div class="angle-header">
+        <div class="angle-header-inner">
+          <div class="angle-num">4</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
+            <span class="tag tag-accent">Cold + Retargeting</span>
+            <span class="tag tag-muted">Video only</span>
+            <span class="tag tag-muted">All audiences</span>
+          </div>
+          <h2 class="angle-name">Product demo — the thing itself</h2>
+          <p class="angle-audience" style="">All audiences. Runs as a cold traffic entry point and as a retargeting layer for visitors who saw Angles 1–3, clicked through, but did not start the call.&nbsp;<div><br></div><div>Works at multiple funnel stages because it does not rely on a specific pain point — shows the product and lets the viewer self-qualify.</div></p>
+        </div>
+      </div>
+      <div class="angle-body">
+        <div class="angle-section">
+          <div class="angle-section-title">Hook logic</div>
+          <div class="callout callout-info">
+            <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4v12a6 6 0 0 1-12 0v-2"></path><circle cx="15" cy="4" r="2"></circle><path d="M7 14l-4 2"></path></svg>
+            <span style="">Every competitor's creative is a person smiling while holding a phone. Nobody shows what actually happens inside the product. <br><br>The hook is the absence of a hook — just the product itself.&nbsp;No emotional setup, no problem-agitation, no category comparison. Just: this is what a Volley session looks like. The viewer either recognizes the value or does not. The ones who do are the right buyers.<br><br>For an early-stage product, honesty is a competitive advantage.</span>
+          </div>
+        </div>
+
+        <div class="angle-section">
+          <div class="angle-section-title">Ad copy</div>
+          <div class="copy-block">
+            <div class="body-text">This is what a Volley AI conversation looks like.<br><br>15 minutes. At the end: your level, your specific gaps, a plan.<br><br>Free. No account required.</div>
+            <div class="copy-meta">
+              <div class="copy-row"><span class="lbl">Headline</span><span class="val"><em>See what a Volley session actually looks like.</em></span></div>
+              <div class="copy-row"><span class="lbl">Description</span><span class="val">Free 15-minute AI conversation. Your level and gaps, in one session. No account required.</span></div>
+              <div class="copy-row"><span class="lbl">CTA button</span><span class="val">Start free</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="angle-section">
+          <div class="angle-section-title">Visual direction — video (9:16, 30s)</div>
+          <div class="card card-sm">
+            <p style="font-size:14px; color:var(--muted-fg); line-height:1.6; margin:0 0 12px;">The entire creative is a screen recording of the AI call in progress. No voiceover. No text overlay during recording. No music.</p>
+            <div style="display:grid; gap:8px;">
+              <div style="display:flex; gap:10px; font-size:13.5px; color:var(--muted-fg);">
+                <span class="tag tag-muted" style="flex-shrink:0">0–5s</span>
+                <span>Language selection and level input. Establishes context.</span>
+              </div>
+              <div style="display:flex; gap:10px; font-size:13.5px; color:var(--muted-fg);">
+                <span class="tag tag-muted" style="flex-shrink:0">5–25s</span>
+                <span>Real AI conversation. AI asks question, user responds, AI follows up naturally. Looks like someone figuring something out — no performance.</span>
+              </div>
+              <div style="display:flex; gap:10px; font-size:13.5px; color:var(--muted-fg);">
+                <span class="tag tag-muted" style="flex-shrink:0">25–30s</span>
+                <span>Results screen loads. Level confirmed, 2–3 specific observations appear. End card: "Free. 15 minutes. No account."</span>
+              </div>
+            </div>
+            <div class="callout callout-warning mt12">
+              <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              <span><strong>Production note:</strong> Build a high-fidelity prototype of the call UI specifically for this ad. A convincing screen recording of a well-designed prototype is indistinguishable from a real product recording in a 30-second ad. This asset doubles as a design reference for the actual product build.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="angle-section">
+          <div class="angle-section-title">What to test</div>
+          <div class="test-block">
+            <div class="test-var">
+              <span class="ver">A</span>
+              <p><strong>Full 30-second call recording</strong> — shows depth and the full process.</p>
+            </div>
+            <div class="test-var">
+              <span class="ver">B</span>
+              <p><strong>15-second cut</strong> — conversation for 8 seconds, results screen for 7 seconds. Primary use case after initial testing is retargeting.</p>
+            </div>
+          </div>
+          <div class="callout callout-success mt12">
+            <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+            <span><strong>Optimize for:</strong> Retargeting CVR once Phases 1–2 are complete</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary table -->
+    <div class="sec mt56">
+      <span class="sec-label">At a glance</span>
+      <h2 class="sec-title">Angle summary</h2>
+    </div>
+    <div class="summary-grid mt24">
+      <div class="summary-row summary-head">
+        <div class="summary-lbl"></div>
+        <div class="summary-cells">
+          <div class="summary-cell">Angle 1</div>
+          <div class="summary-cell">Angle 2</div>
+          <div class="summary-cell">Angle 3</div>
+          <div class="summary-cell">Angle 4</div>
+        </div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-lbl">Audience</div>
+        <div class="summary-cells">
+          <div class="summary-cell">App dropout</div>
+          <div class="summary-cell">Prior spender, stopped</div>
+          <div class="summary-cell">Intermediate plateau</div>
+          <div class="summary-cell">All / retargeting</div>
+        </div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-lbl">Hook</div>
+        <div class="summary-cells">
+          <div class="summary-cell">No one noticed when you quit</div>
+          <div class="summary-cell">Know the problem before spending again</div>
+          <div class="summary-cell">You know the word but can't say it</div>
+          <div class="summary-cell">No hook — product shows itself</div>
+        </div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-lbl">Best format</div>
+        <div class="summary-cells">
+          <div class="summary-cell">Video or static</div>
+          <div class="summary-cell">Static results mock or video</div>
+          <div class="summary-cell">Video or static</div>
+          <div class="summary-cell">Video only</div>
+        </div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-lbl">Optimize for</div>
+        <div class="summary-cells">
+          <div class="summary-cell">Call start rate</div>
+          <div class="summary-cell">Trial-to-paid rate</div>
+          <div class="summary-cell">Call completion rate</div>
+          <div class="summary-cell">Retargeting CVR</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deployment order -->
+    <div class="sec mt56">
+      <span class="sec-label">Launch sequence</span>
+      <h2 class="sec-title">Deployment order</h2>
+    </div>
+    <div class="deploy-steps">
+      <div class="deploy-step">
+        <span class="deploy-n">1</span>
+        <p><strong>Run Angles 1, 2, 3 simultaneously on cold traffic.</strong> Equal budget. Single format per angle. All traffic goes to the new landing page. Do not change the page during Phase 1.</p>
+      </div>
+      <div class="deploy-step">
+        <span class="deploy-n">2</span>
+        <p><strong>After Phase 1 kill decisions, reallocate to the winning angle.</strong> Kill date is day 21 — not day 10, not daily. See the <a href="Testing Plan.html" style="color:var(--primary); font-weight:600;">Testing Plan</a> for full kill logic.</p>
+      </div>
+      <div class="deploy-step">
+        <span class="deploy-n">3</span>
+        <p><strong>Launch Angle 4 as retargeting</strong> against all page visitors who did not start the call.</p>
+      </div>
+      <div class="deploy-step">
+        <span class="deploy-n">4</span>
+        <p><strong>Test Angle 4 on cold traffic</strong> only after the retargeting signal is established.</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="report-footer">
+  <div class="wrap" style="width:100%; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+    <span>Volley Meta Ad Angles · Updated post LP rewrite</span>
+    <nav style="display:flex; gap:16px;">
+      <a href="Funnel One-Pager.html" style="color:var(--primary); font-weight:500; font-size:13px;">← Funnel</a>
+      <a href="Testing Plan.html" style="color:var(--success); font-weight:500; font-size:13px;">Testing Plan →</a>
+    </nav>
+  </div>
+</footer>
+
+
+
+</body></html>

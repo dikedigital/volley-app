@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Volley — Funnel One-Pager</title>
+<meta name="theme-color" content="#F7F4EF" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Nunito:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="report-base.css">
+<style>
+  /* step card */
+  .step-card {
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: 22px;
+    overflow: hidden;
+    margin-top: 24px;
+    display: flex;
+  }
+  .step-num-col {
+    flex-shrink: 0;
+    width: 80px;
+    background: var(--background-deep);
+    border-right: 1px solid var(--border-soft);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 28px;
+  }
+  .step-num {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 32px;
+    color: var(--primary);
+  }
+  .step-content {
+    flex: 1;
+    padding: 28px;
+  }
+  .step-name {
+    font-family: var(--font-serif); font-weight: 500;
+    font-size: clamp(20px, 2.8vw, 26px); line-height: 1.1; color: var(--ink);
+    margin: 0 0 12px; letter-spacing: -0.01em;
+  }
+  .step-desc { font-size: 15px; color: var(--muted-fg); margin: 0; line-height: 1.6; max-width: 65ch; }
+  
+  .assumption-block {
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: rgba(207,160,83,.08);
+    border-left: 3px solid rgba(207,160,83,.4);
+    border-radius: 4px 12px 12px 4px;
+    font-size: 14px; color: var(--foreground); line-height: 1.5;
+  }
+  .assumption-block strong { color: #8C5A10; }
+
+  /* table */
+  .tbl-wrap table { width: 100%; border-collapse: collapse; }
+  .tbl-wrap th, .tbl-wrap td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border-soft); font-size: 14px; }
+  .tbl-wrap th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-fg); font-weight: 700; background: var(--background-deep); }
+  .tbl-wrap tr:last-child td { border-bottom: none; }
+  
+  @media (max-width: 639px) {
+    .step-card { flex-direction: column; }
+    .step-num-col { width: 100%; height: 48px; border-right: none; border-bottom: 1px solid var(--border-soft); padding-top: 0; justify-content: center; }
+    .step-num { font-size: 24px; }
+    .step-content { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../Landing Page.html" class="topbar-logo"><img src="../assets/volley-logo-text.png" alt="Volley"></a>
+    <span class="topbar-sep"></span>
+    <nav class="topbar-links">
+      <a href="Funnel One-Pager.html" class="topbar-link active"><span class="dot" style="background:var(--primary)"></span> Funnel</a>
+      <a href="Meta Ads.html" class="topbar-link"><span class="dot" style="background:var(--accent)"></span> Meta Ads</a>
+      <a href="Testing Plan.html" class="topbar-link"><span class="dot" style="background:var(--success)"></span> Testing Plan</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="report-hero">
+    <div class="wrap">
+      <div class="report-badge"><span class="dot" style="background:var(--primary)"></span> Funnel One-Pager</div>
+      <h1 class="report-title">Nine steps from cold traffic to paid subscriber.</h1>
+      <p class="report-subtitle">The funnel is built around one structural insight: the AI leveling call is the product's strongest conversion moment. Every step before it earns the call. Every step after it converts the experience into a subscription.</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    
+    <div class="sec mt48">
+      <span class="sec-label">Acquisition Funnel</span>
+      <h2 class="sec-title">Step by step</h2>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="step-card">
+      <div class="step-num-col"><div class="step-num">1</div></div>
+      <div class="step-content">
+        <h3 class="step-name">Paid Ad</h3>
+        <p class="step-desc">Target: cold traffic, 28–45, prior language learning experience. Three audience angles, tested in sequence. The ad sells one thing: a free conversation that diagnoses exactly where your language breaks down. It does not mention $99. It does not explain the product. It earns the click.</p>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step-card">
+      <div class="step-num-col"><div class="step-num">2</div></div>
+      <div class="step-content">
+        <h3 class="step-name">Landing Page</h3>
+        <p class="step-desc">Single-scroll page. One CTA. Opens with the failure the buyer already knows. Promises a diagnosis in 15 minutes. No pricing. No feature list. The page's only job is to move the visitor into Step 3.</p>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step-card">
+      <div class="step-num-col"><div class="step-num">3</div></div>
+      <div class="step-content">
+        <h3 class="step-name">Pre-qualification (3 questions)</h3>
+        <p class="step-desc">Language. Current level. Primary goal. These three inputs route the AI call correctly. Email is captured here — after question 3, before the call confirmation. Capturing email at this point creates a retargeting anchor for users who drop before completing the funnel.</p>
+        <div class="assumption-block">
+          <strong>Assumption:</strong> Three inputs are sufficient for the AI to personalise the call opening.
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step-card">
+      <div class="step-num-col"><div class="step-num">4</div></div>
+      <div class="step-content">
+        <h3 class="step-name">AI Leveling Call (15 minutes)</h3>
+        <p class="step-desc">A real adaptive conversation in the target language. The AI assesses level, identifies specific production gaps, and generates the data for the results screen. Runs in-browser. No app download required at this stage. Fully AI-run. No human involvement.</p>
+        <div class="assumption-block">
+          <strong>Assumption:</strong> The AI produces genuinely adaptive conversation, not a scripted flow. This step is the highest-risk assumption in the funnel. If the AI call feels scripted, the results screen loses credibility and conversion drops.
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step-card">
+      <div class="step-num-col"><div class="step-num">5</div></div>
+      <div class="step-content">
+        <h3 class="step-name">Results Screen</h3>
+        <p class="step-desc">Three sections, in sequence:<br><br>
+        <strong>Assessment.</strong> Level confirmed with 2–3 specific observations from the call. Specificity is the conversion driver here — generic level labels do not create urgency.<br><br>
+        <strong>6-week plan.</strong> Three focus areas tied to the goal stated in Step 3. Dynamically generated, not templated.<br><br>
+        <strong>Offer.</strong> $99/month introduced here for the first time, anchored against the personalised plan. 30 days free, no credit card required. First human coach session in week one.</p>
+        <div class="assumption-block">
+          <strong>Assumption:</strong> The AI generates specific, non-generic observations. Assumption: 30-day free period requires no credit card upfront.
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 6 -->
+    <div class="step-card">
+      <div class="step-num-col"><div class="step-num">6</div></div>
+      <div class="step-content">
+        <h3 class="step-name">Account Creation</h3>
+        <p class="step-desc">Name, email (pre-filled), password. One screen. Immediately followed by: "Your first coach session is being scheduled. You'll hear from us within 24 hours." This confirmation message is not optional — it sets the expectation that a human is now engaged and creates a forward commitment before the user has closed the tab.</p>
+        <div class="assumption-block">
+          <strong>Assumption:</strong> Coach scheduling can accommodate new users within the first week of signup.
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 7 -->
+    <div class="step-card">
+      <div class="step-num-col"><div class="step-num">7</div></div>
+      <div class="step-content">
+        <h3 class="step-name">Email Sequence (3 emails)</h3>
+        <p class="step-desc">Covers the gap between account creation and the first human coach session.<br><br>
+        Email 1 (immediate): Restates the assessment. Links to the first AI practice session.<br>
+        Email 2 (24 hours): Coach has reviewed the assessment. Confirms first session focus.<br>
+        Email 3 (48 hours before first session): One practice prompt to do before the call.</p>
+        <div class="assumption-block">
+          <strong>Assumption:</strong> Email 2 requires a real coach reviewing the AI call summary, or copy that does not imply it. If no human review happens at this stage, Email 2 is cut.
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 8 -->
+    <div class="step-card">
+      <div class="step-num-col"><div class="step-num">8</div></div>
+      <div class="step-content">
+        <h3 class="step-name">First Human Coach Session</h3>
+        <p class="step-desc">The coach arrives with the AI call summary and any practice data from the preceding days. The session opens on the specific gap identified in the assessment — not an introduction. This session is the primary retention driver for the 30-day trial period. Its quality determines conversion to paid more than any other variable in the funnel.</p>
+        <div class="assumption-block">
+          <strong>Assumption:</strong> Coaches have technical access to AI call summaries before sessions. This is a hard product requirement, not a nice-to-have.
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 9 -->
+    <div class="step-card">
+      <div class="step-num-col"><div class="step-num">9</div></div>
+      <div class="step-content">
+        <h3 class="step-name">Trial-to-Paid Conversion (Day 28–30)</h3>
+        <p class="step-desc">Two emails at day 21 and day 28. Frame: "here is what you accomplished in 30 days" followed by "here is what the next 30 days look like." The ask is not to avoid losing access. It is to continue something that is working.</p>
+        <div class="assumption-block">
+          <strong>Assumption:</strong> The platform generates enough usage data in 30 days to make this email specific. Users with zero sessions require a separate re-engagement flow before day 28.
+        </div>
+      </div>
+    </div>
+
+    <!-- Assumptions Table -->
+    <div class="sec mt56">
+      <span class="sec-label">Risks</span>
+      <h2 class="sec-title">Key assumptions at a glance</h2>
+    </div>
+    <div class="card mt24 tbl-wrap" style="padding:0; overflow:hidden;">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 80px;">Step</th>
+            <th>Assumption</th>
+            <th>Risk if wrong</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>4</strong></td>
+            <td>AI call is adaptive, not scripted</td>
+            <td>Results feel generic, conversion drops at Step 5</td>
+          </tr>
+          <tr>
+            <td><strong>5</strong></td>
+            <td>AI generates specific observations</td>
+            <td>Diagnosis moment fails, offer lands cold</td>
+          </tr>
+          <tr>
+            <td><strong>5</strong></td>
+            <td>30-day free trial requires no credit card</td>
+            <td>Friction and trust loss at the highest-intent moment</td>
+          </tr>
+          <tr>
+            <td><strong>6</strong></td>
+            <td>Coach scheduling within first week</td>
+            <td>Email sequence loses coherence, drop-off increases</td>
+          </tr>
+          <tr>
+            <td><strong>7</strong></td>
+            <td>Coach reviews AI summary before Email 2</td>
+            <td>Credibility risk if implied but not true</td>
+          </tr>
+          <tr>
+            <td><strong>8</strong></td>
+            <td>Coach has access to AI call data</td>
+            <td>First session feels generic, trial-to-paid rate drops</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Critical Path -->
+    <div class="sec mt56">
+      <span class="sec-label">Summary</span>
+      <h2 class="sec-title">The critical path</h2>
+      <p class="sec-body mt12" style="font-size:16px; max-width: 70ch; color:var(--foreground);">Steps 4, 5 and 8 carry the funnel. The AI call creates the insight. The results screen converts it into intent. The first human session converts intent into payment. Every other step is infrastructure supporting these three moments. If any of the three underperforms, optimising the ad or the landing page will not fix the problem.</p>
+    </div>
+
+  </div>
+</main>
+
+<footer class="report-footer mt56">
+  <div class="wrap" style="width:100%; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+    <span>Volley Acquisition Funnel · Executive Review</span>
+    <nav style="display:flex; gap:16px;">
+      <a href="Meta Ads.html" style="color:var(--accent); font-weight:500; font-size:13px;">Meta Ads →</a>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
